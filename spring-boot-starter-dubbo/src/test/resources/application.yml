@@ -1,0 +1,10 @@
+server:
+  port: 1025
+
+spring:
+  profiles:
+    active: dubbo-standard
+
+management:
+  security:
+    enabled: false

@@ -1,0 +1,24 @@
+dubbo:
+  providers:
+    - threads: 200
+      protocols:
+        - name: dubbo
+          port: 20881
+        - name: dubbo
+          port: 20402
+        - id: dubbo-1
+    - threads: 300
+  services:
+    - interface: com.dxhy.basic.dubbo.demo.service.DemoService
+      connections: 10
+      protocols:
+        - name: dubbo
+          port: 20401
+        - id: rest-2
+      timeout: 2000
+      ref: demoServiceImpl
+
+    - interface: com.dxhy.basic.dubbo.demo.service.DemoService2
+      connections: 10
+      timeout: 2000
+      ref: demoServiceImpl2

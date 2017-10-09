@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--加载spring的日志配置文件-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <logger name="org.springframework" level="info"/>
+    <logger name="com.alibaba.druid" level="info"/>
+    <logger name="com.dxhy" level="info"/>
+
+    <!--对dubbo的日志级别配置-->
+    <logger name="com.alibaba.dubbo" level="info"/>
+    <logger name="org.apache.zookeeper.ZooKeeper" level="warn"/>
+    <logger name="org.I0Itec.zkclient" level="warn"/>
+    <logger name="com.alibaba.dubbo.remoting.transport.AbstractClient" level="warn"/>
+    <logger name="com.alibaba.dubbo.rpc" level="warn"/>
+    <logger name="com.alibaba.dubbo.registry.zookeeper.ZookeeperRegistry" level="warn"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!--对dubbo的日志级别配置-->
+    <logger name="com.alibaba.dubbo" level="info"/>
+    <logger name="org.apache.zookeeper.ZooKeeper" level="warn"/>
+    <logger name="org.I0Itec.zkclient" level="warn"/>
+    <logger name="com.alibaba.dubbo.remoting.transport.AbstractClient" level="warn"/>
+    <logger name="com.alibaba.dubbo.rpc" level="warn"/>
+    <logger name="com.alibaba.dubbo.registry.zookeeper.ZookeeperRegistry" level="warn"/>
+
+    <logger name="org.springframework" level="info"/>
+    <logger name="com.dxhy" level="debug"/>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

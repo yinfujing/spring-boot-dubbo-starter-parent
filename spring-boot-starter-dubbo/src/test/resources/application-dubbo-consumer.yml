@@ -1,0 +1,16 @@
+dubbo:
+  consumers:
+      #TODO 测试属性配置是否生效
+    - timeout: 1000
+      retries: 2
+      isDefault: true
+    - id: consumer-1
+      timeout: 5000
+      retries: 5
+  references:
+    - interface: rui.framework.DemoService
+      protocol: dubbo
+    - interface: rui.framework.DemoService
+      protocol: dubbo
+      consumer:
+        id: consumer-1

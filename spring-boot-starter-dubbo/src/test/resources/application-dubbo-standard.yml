@@ -1,0 +1,68 @@
+server:
+  port: 1025
+
+management:
+  security:
+    enabled: false
+
+
+dubbo:
+  applications:
+    - name: framework-unit-test
+      owner: zhaorui
+      organization: com.dxhy.basic.dubbo
+  modules:
+    - name: framework-unit-test
+      version: 1.0
+      owner: zhaorui
+      organization: com.dxhy.basic.dubbo
+      registries:
+        - id: zk153
+        - id: zk153-1
+      monitor:
+      isDefault: true
+  registries:
+    - id: zk153
+      address: 10.1.1.153:2181
+      protocol: zookeeper
+      isDefault: true
+    - id: zk153-1
+      address: 10.1.1.153:2181
+      protocol: zookeeper
+      isDefault: true
+  monitors:
+    - protocol: registry
+      address: 10.1.1.153:2181
+      isDefault: true
+  annotations:
+    - annotationPackage: rui
+    - annotationPackages:
+      - rui
+      - com
+      - org
+  protocols:
+    - id: dubbo-1
+      name: dubbo
+      port: 20080
+      isDefault: true
+    - id: dubbo-2
+      name: dubbo
+      port: 20081
+      host: 10.1.22.251
+    - id: rest-1
+      name: rest
+      port: 20882
+      server: tomcat
+    - id: rest-2
+      name: rest
+      port: 20883
+      server: jetty
+    - id: rest-3
+      name: rest
+      port: 20883
+      server: netty
+    - id: rest-4
+      name: rest
+      port: 20884
+      server: servlet
+

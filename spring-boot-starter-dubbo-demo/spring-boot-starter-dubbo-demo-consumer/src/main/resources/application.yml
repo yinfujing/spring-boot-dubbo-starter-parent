@@ -1,0 +1,25 @@
+server:
+  port: 1026
+
+management:
+  security:
+    enabled: false
+
+dubbo:
+  application:
+    name: consumer-demo
+    owner: zhaorui
+    organization: com.dxhy.basic.dubbo
+  registry:
+    address: 10.1.1.153:2181
+    protocol: zookeeper
+  consumerEnable: true
+  consumerConfig:
+    timeout: 5000
+    retries: 5
+  consumer:
+    - interface: com.dxhy.basic.dubbo.demo.service.DemoService
+      protocol: dubbo
+      consumer:
+        timeout: 5000
+        retries: 5

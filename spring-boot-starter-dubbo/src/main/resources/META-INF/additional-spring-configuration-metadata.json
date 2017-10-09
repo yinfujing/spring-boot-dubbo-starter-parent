@@ -1,0 +1,29 @@
+{
+  "properties": [
+    {
+      "name": "dubbo.application",
+      "type": "java.lang.String",
+      "description": "dubbo ApplicationConfig"
+    },
+    {
+      "name": "dubbo.registry",
+      "type": "java.lang.String",
+      "description": "dubbo RegistryConfig"
+    },
+
+    {
+      "name": "dubbo.consumerEnable",
+      "type": "java.lang.String",
+      "description": "dubbo consumer enable"
+    },
+    {
+      "name": "dubbo.consumerConfig.timeout",
+      "type": "java.lang.String",
+      "description": "dubbo 全局 消费者消费超时"
+    },
+    {
+      "name": "dubbo.consumerConfig.retries",
+      "type": "java.lang.String",
+      "description": "dubbo 全局 消费者消费失败重试"
+    }
+  ] }
