@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.spring.boot.autoconfigure;
+package com.alibaba.dubbo.spring.boot.demo;
 
 /**
  * demo类接口

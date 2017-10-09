@@ -1,11 +1,10 @@
-package com.alibaba.dubbo.spring.boot.condition;
+package com.alibaba.dubbo.spring.boot.autoconfigure;
 
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ConsumerConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.spring.ReferenceBean;
-import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;

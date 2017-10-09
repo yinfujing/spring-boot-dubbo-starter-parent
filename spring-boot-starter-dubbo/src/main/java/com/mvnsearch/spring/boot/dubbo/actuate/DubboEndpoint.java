@@ -5,7 +5,7 @@ import com.alibaba.dubbo.config.ProviderConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.spring.ServiceBean;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
-import com.alibaba.dubbo.spring.boot.condition.DubboServiceAutoConfiguration;
+import com.alibaba.dubbo.spring.boot.autoconfigure.DubboServiceAutoConfiguration;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;

@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.spring.boot.autoconfigure;
+package com.alibaba.dubbo.spring.boot.demo;
 
 import org.springframework.stereotype.Service;
 

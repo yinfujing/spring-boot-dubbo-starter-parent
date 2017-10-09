@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.spring.boot.condition;
+package com.alibaba.dubbo.spring.boot.autoconfigure;
 
 import com.alibaba.dubbo.config.spring.ServiceBean;
 import org.springframework.beans.factory.annotation.Autowired;

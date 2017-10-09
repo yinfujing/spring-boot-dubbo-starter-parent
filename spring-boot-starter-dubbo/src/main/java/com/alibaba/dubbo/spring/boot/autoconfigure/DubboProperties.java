@@ -5,7 +5,9 @@ import com.alibaba.dubbo.config.spring.AnnotationBean;
 import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.alibaba.dubbo.config.spring.ServiceBean;
 import com.alibaba.dubbo.config.spring.schema.DubboNamespaceHandler;
+import com.google.common.collect.Lists;
 import lombok.Data;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -39,20 +41,4 @@ public class DubboProperties {
 
     private List<AnnotationBean> annotations;
 
-
-    @Override
-    public String toString() {
-        return "DubboProperties{" +
-                "applications=" + applications +
-                ", modules=" + modules +
-                ", registries=" + registries +
-                ", monitors=" + monitors +
-                ", providers=" + providers +
-                ", consumers=" + consumers +
-                ", protocols=" + protocols +
-                ", services=" + services +
-                ", references=" + references +
-                ", annotations=" + annotations +
-                '}';
-    }
 }
