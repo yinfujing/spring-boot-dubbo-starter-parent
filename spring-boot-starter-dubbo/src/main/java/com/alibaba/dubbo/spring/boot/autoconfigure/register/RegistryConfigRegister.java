@@ -1,5 +1,6 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
+import com.alibaba.dubbo.config.AbstractConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.Getter;
@@ -10,47 +11,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class RegistryConfigRegister extends RegisterDubboConfig {
-    @Getter
-    private RegistryConfig defaultRegistryConfig;
-    @Getter
-    private List<RegistryConfig> registryConfigs;
+public class RegistryConfigRegister extends RegisterDubboConfig<RegistryConfig> {
 
     public RegistryConfigRegister(BeanFactory beanFactory, DubboProperties dubboProperties) {
         super(beanFactory, dubboProperties);
-        this.registryConfigs=dubboProperties.getRegistries();
-        getDefault(registryConfigs);
     }
 
     @Override
-    public void registerDubboConfig() {
-        log.debug("注册 RegistryConfig");
-        for (RegistryConfig registryConfig : registryConfigs) {
-            beanFactory.registerSingleton(registryConfig.getId(),registryConfig);
-        }
+    public Class<RegistryConfig> getTClass() {
+        return RegistryConfig.class;
     }
 
-    private void getDefault(List<RegistryConfig> registryConfigs){
-        if(registryConfigs!=null&&registryConfigs.size()!=0){
-            //循环得到默认，如果没有默认，则设置第一个为默认
-            for (RegistryConfig registryConfig : registryConfigs) {
-                if(registryConfig.isDefault()!=null&&registryConfig.isDefault()){
-                    defaultRegistryConfig=registryConfig;
-                    return ;
-                }
-            }
-            if(defaultRegistryConfig==null){
-                defaultRegistryConfig= registryConfigs.get(0);
-            }
-        }else{
-            registryConfigs=new ArrayList<>();
-            defaultRegistryConfig=new RegistryConfig();
-            defaultRegistryConfig.setId("zk");
-            defaultRegistryConfig.setAddress("127.0.0.1:2181");
-            defaultRegistryConfig.setProtocol("zookeeper");
-            defaultRegistryConfig.setServer("dubbo");
-            registryConfigs.add(defaultRegistryConfig);
-        }
-        defaultRegistryConfig.setDefault(true);
+    @Override
+    void initConfigs() {
+        this.configs=dubboProperties.getRegistries();
     }
+
+    @Override
+    RegistryConfig getDefaultBySystem() {
+        RegistryConfig registryConfig=new RegistryConfig();
+        registryConfig.setId("zk");
+        registryConfig.setAddress("127.0.0.1:2181");
+        registryConfig.setProtocol("zookeeper");
+        registryConfig.setServer("dubbo");
+        registryConfig.setDefault(true);
+        return registryConfig;
+    }
+
+    @Override
+    public RegistryConfig compareAndMerge(RegistryConfig source, RegistryConfig target) {
+        return source;
+    }
+
 }

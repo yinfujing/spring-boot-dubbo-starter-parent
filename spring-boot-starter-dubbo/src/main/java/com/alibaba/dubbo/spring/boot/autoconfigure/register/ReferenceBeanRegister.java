@@ -1,5 +1,6 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
+import com.alibaba.dubbo.config.AbstractConfig;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.spring.ReferenceBean;
@@ -8,54 +9,71 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
+public class ReferenceBeanRegister extends RegisterDubboConfig<ReferenceBean> {
+    public ReferenceBeanRegister(BeanFactory listableBeanFactory, DubboProperties dubboProperties) {
+        super(listableBeanFactory, dubboProperties);
+    }
 
-public class ReferenceBeanRegister extends RegisterDubboConfig {
+    @Override
+    public Class<ReferenceBean> getTClass() {
+        return ReferenceBean.class;
+    }
 
-    private List<ReferenceBean> referenceBeans;
+
+    @Override
+    void initConfigs() {
+        this.configs=dubboProperties.getReferences();
+        init();
+    }
+
+    @Override
+    ReferenceBean getDefaultBySystem() {
+        return null;
+    }
+
+
+    @Override
+    public ReferenceBean compareAndMerge(ReferenceBean source, ReferenceBean target) {
+        return source;
+    }
+
+
     @Autowired
     private ApplicationConfigRegister applicationConfigRegister;
     @Autowired
     private RegistryConfigRegister registryConfigRegister;
 
-    public ReferenceBeanRegister(BeanFactory listableBeanFactory, DubboProperties dubboProperties) {
-        super(listableBeanFactory, dubboProperties);
-        referenceBeans=dubboProperties.getReferences();
-    }
-
-    @Override
-    public void registerDubboConfig() {
-        for (ReferenceBean referenceBean : referenceBeans) {
-           beanFactory.registerSingleton(referenceBean.getId(),referenceBean);
-        }
-    }
 
     public void init(){
-        for (ReferenceBean referenceBean : referenceBeans) {
+        for (ReferenceBean referenceBean : configs) {
             initApplicationConfig(referenceBean);
 
+            //? 多注册中心可能有麻烦
             RegistryConfig registryConfig=referenceBean.getRegistry();
             if(registryConfig==null){
-                referenceBean.setRegistry(registryConfigRegister.getDefaultRegistryConfig());
+                referenceBean.setRegistry(registryConfigRegister.getDefault());
             }else{
-//                if()
+                if(StringUtils.isEmpty(registryConfig.getAddress())){
+                    registryConfig=registryConfigRegister.getAbstractConfigById(registryConfig.getId());
+                }else{
+                    registryConfig=registryConfigRegister.merge(registryConfig);
+                }
             }
+            referenceBean.setRegistry(registryConfig);
         }
     }
 
     private void initApplicationConfig(ReferenceBean referenceBean) {
         ApplicationConfig applicationConfig=referenceBean.getApplication();
         if(applicationConfig==null){
-            applicationConfig=applicationConfigRegister.getDefaultApplicationConfig();
+            applicationConfig=applicationConfigRegister.getDefault();
         }else {
             if(StringUtils.isEmpty(applicationConfig.getName())){
-                applicationConfig=applicationConfigRegister.getApplicationConfigById(applicationConfig.getId());
+                applicationConfig=applicationConfigRegister.getAbstractConfigById(applicationConfig.getId());
             }else{
                 applicationConfig=applicationConfigRegister.merge(applicationConfig);
             }
         }
         referenceBean.setApplication(applicationConfig);
     }
-
-
 }
