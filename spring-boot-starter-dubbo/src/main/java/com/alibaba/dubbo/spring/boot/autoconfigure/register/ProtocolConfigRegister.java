@@ -1,6 +1,5 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
-import com.alibaba.dubbo.config.AbstractConfig;
 import com.alibaba.dubbo.config.ProtocolConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.extern.slf4j.Slf4j;

@@ -54,6 +54,6 @@ public class ApplicationConfigRegister  extends RegisterDubboConfig<ApplicationC
 
     @Override
     public ApplicationConfig compareAndMerge(ApplicationConfig source, ApplicationConfig target) {
-        return source;
+        return target;
     }
 }

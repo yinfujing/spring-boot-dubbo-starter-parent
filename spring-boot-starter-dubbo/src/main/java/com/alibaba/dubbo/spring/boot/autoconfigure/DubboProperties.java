@@ -37,7 +37,7 @@ public class DubboProperties {
     private List<ProviderConfig> providers;
     private List<ServiceBean> services;
     private List<ConsumerConfig> consumers;
-    private List<ReferenceBean> references;
+    private List<ReferenceConfig> references;
 
     private List<AnnotationBean> annotations;
 

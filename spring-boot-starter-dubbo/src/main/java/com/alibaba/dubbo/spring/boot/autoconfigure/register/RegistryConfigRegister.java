@@ -1,9 +1,7 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
-import com.alibaba.dubbo.config.AbstractConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 
@@ -12,6 +10,8 @@ import java.util.List;
 
 @Slf4j
 public class RegistryConfigRegister extends RegisterDubboConfig<RegistryConfig> {
+
+    private List<RegistryConfig> defaultRegistryConfigList;
 
     public RegistryConfigRegister(BeanFactory beanFactory, DubboProperties dubboProperties) {
         super(beanFactory, dubboProperties);
@@ -41,6 +41,21 @@ public class RegistryConfigRegister extends RegisterDubboConfig<RegistryConfig> 
     @Override
     public RegistryConfig compareAndMerge(RegistryConfig source, RegistryConfig target) {
         return source;
+    }
+
+    public List<RegistryConfig> getDefaultRegistryConfigList(){
+        if(defaultRegistryConfigList==null){
+            defaultRegistryConfigList=new ArrayList<>();
+            for (RegistryConfig config : configs) {
+                if(config.isDefault()!=null&&config.isDefault()){
+                    defaultRegistryConfigList.add(config);
+                }
+            }
+            if(defaultRegistryConfigList.size()==0){
+                defaultRegistryConfigList.add(defaultConfig);
+            }
+        }
+        return defaultRegistryConfigList;
     }
 
 }

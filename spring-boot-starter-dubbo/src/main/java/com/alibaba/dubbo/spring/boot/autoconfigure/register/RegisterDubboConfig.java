@@ -1,7 +1,10 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
 import com.alibaba.dubbo.config.AbstractConfig;
+import com.alibaba.dubbo.config.ConsumerConfig;
+import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.BeanFactory;
@@ -12,17 +15,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Slf4j
 public abstract class RegisterDubboConfig<T extends AbstractConfig> {
 
     final DefaultListableBeanFactory beanFactory;
     final DubboProperties dubboProperties;
-    public T defaultConfig;
-    public List<T> configs;
+    @Getter
+    T defaultConfig;
+    @Getter
+    List<T> configs;
 
     public abstract Class<T> getTClass();
-
 
     RegisterDubboConfig(BeanFactory listableBeanFactory, DubboProperties dubboProperties) {
         this.beanFactory = (DefaultListableBeanFactory) listableBeanFactory;
@@ -34,13 +39,72 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     abstract void initConfigs();
     abstract T getDefaultBySystem();
 
-    public void registerDubboConfig(){
+    public void registerDubboConfig() throws Exception {
         log.debug("注册 {}",getTClass().getCanonicalName());
         for (T config : configs) {
+            initConfigId(config);
             beanFactory.registerSingleton(config.getId(),config);
         }
     }
 
+    /**
+     * 初始化 config 的id 属性
+     */
+    void initConfigId(T config) {
+        String id=config.getId();
+        if(StringUtils.isEmpty(id)){
+           id= getIdIfNotExist(config);
+           config.setId(id);
+        }else if(beanFactory.containsBeanDefinition(id)){
+            throw new IllegalStateException("Duplicate spring bean id " + id);
+        }
+    }
+
+    private String getIdIfNotExist(T config) {
+        String name = getNameByPropertiesOrClassName(config);
+        String id=name;
+        int counter=2;
+        while(beanFactory.containsBeanDefinition(id)){
+            id=name+(counter++);
+        }
+        return id;
+    }
+
+    /**
+     * 根据 名称属性或者 类名获得 name
+     */
+    private String getNameByPropertiesOrClassName(T config) {
+        String name;
+        if(config instanceof ConsumerConfig){
+            name=config.getClass().getName();
+        }else{
+            name=getName(config);
+            if(StringUtils.isEmpty(name)){
+                name=config.getClass().getName();
+                setName(config,name);
+            }
+        }
+        return name;
+    }
+
+    @SuppressWarnings("JavaReflectionMemberAccess")
+    private String getName(T t){
+        try {
+            return (String) t.getClass().getDeclaredMethod("getName").invoke(t);
+        } catch (IllegalAccessException| InvocationTargetException |NoSuchMethodException e) {
+            log.info("getName 失败",e);
+            return null;
+        }
+    }
+
+    @SuppressWarnings("JavaReflectionMemberAccess")
+    private void setName(T t, String name){
+        try {
+            t.getClass().getDeclaredMethod("setName",String.class).invoke(t,name);
+        } catch (IllegalAccessException| InvocationTargetException |NoSuchMethodException e) {
+            log.info("setName 失败",e);
+        }
+    }
 
 
     @SuppressWarnings({"JavaReflectionMemberAccess"})
@@ -64,6 +128,9 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     @SuppressWarnings("JavaReflectionMemberAccess")
     private Method getIsDefaultMethod(){
         try {
+            if(ReferenceBean.class.equals(getTClass())){
+                return null;
+            }
              return  getTClass().getDeclaredMethod("isDefault");
         } catch (NoSuchMethodException e) {
             log.debug("{} 没有 isDefault 方法", getTClass().getCanonicalName());
@@ -83,10 +150,10 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     @SuppressWarnings({"JavaReflectionMemberAccess", "JavaReflectionInvocation"})
     private void setFirstElementAsDefault(Class<T> tClass) {
         try {
-            tClass.getDeclaredMethod("setDefault").invoke(defaultConfig,true);
+            tClass.getDeclaredMethod("setDefault",Boolean.class).invoke(defaultConfig,true);
             configs.set(0,defaultConfig);
         } catch (NoSuchMethodException | IllegalAccessException |InvocationTargetException e) {
-            log.debug("{} 没有 isDefault 方法", tClass.getCanonicalName());
+            log.debug("{} 没有 setDefault 方法", tClass.getCanonicalName());
         }
     }
 
@@ -111,7 +178,7 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     }
 
 
-    public T getAbstractConfigById(String id) {
+    T getAbstractConfigById(String id) {
         T t = null;
         if (StringUtils.isEmpty(id)) {
             t = defaultConfig;
@@ -129,19 +196,29 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
         return t;
     }
 
-    public T merge(T source) {
-        T target = null;
+    T merge(T source) {
         try {
-            target = getAbstractConfigById(source.getId());
-            target = compareAndMerge(source, target);
+            T target = getAbstractConfigById(source.getId());
+            source = compareAndMerge(source, target);
         } catch (BeanDefinitionStoreException e) {
-            configs.add((T) target);
+            initConfigId(source);
+            configs.add(source);
+            beanFactory.registerSingleton(source.getId(),source);
         }
-        return target;
+        return source;
     }
 
     /**
      * 比较并 merge ,甚至可能涉及到合并等的操作
      */
     public abstract T compareAndMerge(T source, T target);
+
+
+    T getDefault(T source){
+        if(source==null){
+            return defaultConfig;
+        }else{
+            return merge(source);
+        }
+    }
 }

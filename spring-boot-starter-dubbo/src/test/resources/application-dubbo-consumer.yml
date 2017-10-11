@@ -8,9 +8,5 @@ dubbo:
       timeout: 5000
       retries: 5
   references:
-    - interface: rui.framework.DemoService
+    - interface: com.alibaba.dubbo.spring.boot.demo.DemoService
       protocol: dubbo
-    - interface: rui.framework.DemoService
-      protocol: dubbo
-      consumer:
-        id: consumer-1

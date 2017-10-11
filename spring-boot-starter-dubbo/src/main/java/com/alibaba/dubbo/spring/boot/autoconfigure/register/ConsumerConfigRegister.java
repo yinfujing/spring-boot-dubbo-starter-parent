@@ -35,6 +35,6 @@ public class ConsumerConfigRegister extends RegisterDubboConfig <ConsumerConfig>
 
     @Override
     public ConsumerConfig compareAndMerge(ConsumerConfig source, ConsumerConfig target) {
-        return source;
+        return target;
     }
 }

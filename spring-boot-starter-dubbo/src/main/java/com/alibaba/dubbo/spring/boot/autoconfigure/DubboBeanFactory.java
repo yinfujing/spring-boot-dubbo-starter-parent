@@ -18,24 +18,10 @@ public class DubboBeanFactory implements BeanFactoryAware {
     @Setter
     private BeanFactory beanFactory;
 
-    private final DubboProperties dubboProperties;
-
-    private Environment environment;
-
-    private List<RegisterDubboConfig> registerDubboConfigs;
-
-    public DubboBeanFactory(DubboProperties dubboProperties, Environment environment) {
-        this.dubboProperties = dubboProperties;
-        this.environment = environment;
-
-    }
-
     @PostConstruct
-    public void register() {
+    public void register() throws Exception {
         log.debug("dubbo 工厂注册 ");
-        Assert.notNull(this.dubboProperties, "dubbo 在spring boot 中的配置文件不能为空");
         DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory) beanFactory;
-
         Map<String,RegisterDubboConfig> registerDubboConfigMap=listableBeanFactory.getBeansOfType(RegisterDubboConfig.class);
         for (RegisterDubboConfig registerDubboConfig : registerDubboConfigMap.values()) {
             registerDubboConfig.registerDubboConfig();
