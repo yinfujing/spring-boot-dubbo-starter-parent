@@ -97,7 +97,7 @@ public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> im
             for (ServiceConfig config : configs) {
                 if (isDelay(config) && !config.isExported() && !config.isUnexported()) {
                     if (log.isInfoEnabled()) {
-                        log.info("The service ready on spring started. service: " + config.getInterface());
+                        log.info("服务 {} 开始提供服务!",config.getInterface());
                     }
                     config.export();
                 }
