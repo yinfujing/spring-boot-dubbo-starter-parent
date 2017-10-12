@@ -16,7 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
         DubboBeanFactory.class
         , MonitorConfigRegister.class
         , ApplicationConfigRegister.class, ModuleConfigRegister.class, RegistryConfigRegister.class, ProtocolConfigRegister.class
+        , ServiceConfigRegister.class
         , ConsumerConfigRegister.class, ReferenceConfigRegister.class
+
 })
 @EnableConfigurationProperties({DubboProperties.class})
 @Slf4j

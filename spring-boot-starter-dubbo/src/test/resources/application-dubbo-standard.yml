@@ -1,11 +1,3 @@
-server:
-  port: 1025
-
-management:
-  security:
-    enabled: false
-
-
 dubbo:
   applications:
     - name: framework-unit-test
@@ -23,17 +15,16 @@ dubbo:
       isDefault: true
   registries:
     - id: zk153
-      address: 10.1.1.153:2181
+      address: 10.1.1.234:2181
       protocol: zookeeper
       isDefault: true
     - id: zk153-1
       address: 10.1.1.153:2181
       protocol: zookeeper
-      isDefault: true
-  monitors:
-    - protocol: registry
-      address: 10.1.1.153:2181
-      isDefault: true
+#  monitors:
+#    - protocol: registry
+#      address: 10.1.1.153:2181
+#      isDefault: true
   annotations:
     - annotationPackage: rui
     - annotationPackages:

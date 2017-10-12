@@ -1,6 +1,8 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
+import com.alibaba.dubbo.config.AbstractInterfaceConfig;
 import com.alibaba.dubbo.config.ModuleConfig;
+import com.alibaba.dubbo.config.ServiceConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -34,5 +36,10 @@ public class ModuleConfigRegister extends RegisterDubboConfig<ModuleConfig> {
     @Override
     public ModuleConfig compareAndMerge(ModuleConfig source, ModuleConfig target) {
         return source;
+    }
+
+    void initConfig(AbstractInterfaceConfig config) {
+        ModuleConfig moduleConfig = config.getModule();
+        config.setModule(getDefault(moduleConfig));
     }
 }

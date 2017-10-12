@@ -9,16 +9,11 @@ dubbo:
         - id: dubbo-1
     - threads: 300
   services:
-    - interface: com.dxhy.basic.dubbo.demo.service.DemoService
+    - interface: com.alibaba.dubbo.spring.boot.demo.DemoService
       connections: 10
       protocols:
         - name: dubbo
           port: 20401
-        - id: rest-2
+#        - id: rest-2
       timeout: 2000
-      ref: demoServiceImpl
-
-    - interface: com.dxhy.basic.dubbo.demo.service.DemoService2
-      connections: 10
-      timeout: 2000
-      ref: demoServiceImpl2
+      ref: com.alibaba.dubbo.spring.boot.demo.DemoServiceImpl

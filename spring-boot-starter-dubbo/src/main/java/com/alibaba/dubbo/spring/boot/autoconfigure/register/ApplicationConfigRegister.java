@@ -1,7 +1,9 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
 import com.alibaba.dubbo.config.AbstractConfig;
+import com.alibaba.dubbo.config.AbstractInterfaceConfig;
 import com.alibaba.dubbo.config.ApplicationConfig;
+import com.alibaba.dubbo.config.ServiceConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +18,6 @@ import java.util.List;
 
 @Slf4j
 public class ApplicationConfigRegister  extends RegisterDubboConfig<ApplicationConfig>{
-
-
-
     public ApplicationConfigRegister(BeanFactory beanFactory, DubboProperties dubboProperties) {
         super(beanFactory, dubboProperties);
     }
@@ -56,4 +55,10 @@ public class ApplicationConfigRegister  extends RegisterDubboConfig<ApplicationC
     public ApplicationConfig compareAndMerge(ApplicationConfig source, ApplicationConfig target) {
         return target;
     }
+
+    public void initConfig(AbstractInterfaceConfig config) {
+        ApplicationConfig applicationConfig = config.getApplication();
+        config.setApplication(getDefault(applicationConfig));
+    }
+
 }

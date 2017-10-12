@@ -2,6 +2,7 @@ package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
 import com.alibaba.dubbo.config.AbstractConfig;
 import com.alibaba.dubbo.config.ConsumerConfig;
+import com.alibaba.dubbo.config.MonitorConfig;
 import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.Getter;
@@ -15,7 +16,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Slf4j
 public abstract class RegisterDubboConfig<T extends AbstractConfig> {
@@ -40,10 +40,12 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     abstract T getDefaultBySystem();
 
     public void registerDubboConfig() throws Exception {
-        log.debug("注册 {}",getTClass().getCanonicalName());
-        for (T config : configs) {
-            initConfigId(config);
-            beanFactory.registerSingleton(config.getId(),config);
+        if(configs!=null){
+            log.debug("注册 {}",getTClass().getCanonicalName());
+            for (T config : configs) {
+                initConfigId(config);
+                beanFactory.registerSingleton(config.getId(),config);
+            }
         }
     }
 
@@ -77,6 +79,8 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
         String name;
         if(config instanceof ConsumerConfig){
             name=config.getClass().getName();
+        }else if(config instanceof MonitorConfig){
+            name=config.getClass().getName();
         }else{
             name=getName(config);
             if(StringUtils.isEmpty(name)){
@@ -108,7 +112,7 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
 
 
     @SuppressWarnings({"JavaReflectionMemberAccess"})
-    T getDefault() {
+    private T getDefault() {
         Class<T> tClass = getTClass();
         Method method=getIsDefaultMethod();
         //校验，是否存在 isDefault() 这个方法,不存在将不处理！
@@ -142,9 +146,11 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
      * list 都为空， 自动启用系统初始化配置
      */
     private void initByDefault() {
-        configs=new ArrayList<>();
         defaultConfig=getDefaultBySystem();
-        configs.add(defaultConfig);
+        if(defaultConfig!=null){
+            configs=new ArrayList<>();
+            configs.add(defaultConfig);
+        }
     }
 
     @SuppressWarnings({"JavaReflectionMemberAccess", "JavaReflectionInvocation"})
@@ -178,7 +184,7 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     }
 
 
-    T getAbstractConfigById(String id) {
+    private T getAbstractConfigById(String id) {
         T t = null;
         if (StringUtils.isEmpty(id)) {
             t = defaultConfig;

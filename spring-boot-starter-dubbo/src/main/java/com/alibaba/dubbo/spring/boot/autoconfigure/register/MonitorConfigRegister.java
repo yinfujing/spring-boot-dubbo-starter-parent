@@ -1,5 +1,6 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
+import com.alibaba.dubbo.config.AbstractInterfaceConfig;
 import com.alibaba.dubbo.config.MonitorConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import org.springframework.beans.factory.BeanFactory;
@@ -21,11 +22,16 @@ public class MonitorConfigRegister extends RegisterDubboConfig<MonitorConfig> {
 
     @Override
     MonitorConfig getDefaultBySystem() {
-        return new MonitorConfig();
+        return null;
     }
 
     @Override
     public MonitorConfig compareAndMerge(MonitorConfig source, MonitorConfig target) {
         return target;
+    }
+
+    void initConfig(AbstractInterfaceConfig config) {
+        MonitorConfig monitorConfig=config.getMonitor();
+        config.setMonitor(getDefault(monitorConfig));
     }
 }

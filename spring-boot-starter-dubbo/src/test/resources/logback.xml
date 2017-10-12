@@ -3,7 +3,7 @@
     <!--加载spring的日志配置文件-->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <logger name="org.springframework" level="debug"/>
+    <logger name="org.springframework" level="info"/>
     <logger name="com.alibaba.druid" level="info"/>
     <logger name="com.dxhy" level="info"/>
 

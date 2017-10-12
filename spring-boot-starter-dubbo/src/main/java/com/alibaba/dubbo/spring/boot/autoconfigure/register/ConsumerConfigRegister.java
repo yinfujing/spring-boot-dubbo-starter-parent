@@ -1,7 +1,6 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
-import com.alibaba.dubbo.config.AbstractConfig;
-import com.alibaba.dubbo.config.ConsumerConfig;
+import com.alibaba.dubbo.config.*;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -37,4 +36,10 @@ public class ConsumerConfigRegister extends RegisterDubboConfig <ConsumerConfig>
     public ConsumerConfig compareAndMerge(ConsumerConfig source, ConsumerConfig target) {
         return target;
     }
+
+    void initConfig(ReferenceConfig referenceConfig) {
+        ConsumerConfig consumerConfig = referenceConfig.getConsumer();
+        referenceConfig.setConsumer(getDefault(consumerConfig));
+    }
+
 }

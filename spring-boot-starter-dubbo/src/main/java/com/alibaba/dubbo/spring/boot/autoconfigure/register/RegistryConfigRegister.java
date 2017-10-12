@@ -1,6 +1,8 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
+import com.alibaba.dubbo.config.AbstractInterfaceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
+import com.alibaba.dubbo.config.ServiceConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -43,7 +45,7 @@ public class RegistryConfigRegister extends RegisterDubboConfig<RegistryConfig> 
         return source;
     }
 
-    public List<RegistryConfig> getDefaultRegistryConfigList(){
+    private List<RegistryConfig> getDefaultRegistryConfigList(){
         if(defaultRegistryConfigList==null){
             defaultRegistryConfigList=new ArrayList<>();
             for (RegistryConfig config : configs) {
@@ -58,4 +60,16 @@ public class RegistryConfigRegister extends RegisterDubboConfig<RegistryConfig> 
         return defaultRegistryConfigList;
     }
 
+    void initConfig(AbstractInterfaceConfig config) {
+        List<RegistryConfig> registries = config.getRegistries();
+        if (registries == null || registries.size() == 0) {
+            registries=getDefaultRegistryConfigList();
+        } else {
+            for (int i = 0; i < registries.size(); i++) {
+                RegistryConfig registry = merge(registries.get(i));
+                registries.set(i, registry);
+            }
+        }
+        config.setRegistries(registries);
+    }
 }
