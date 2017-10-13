@@ -34,7 +34,7 @@ public class DubboBeanFactory implements BeanPostProcessor {
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if(!registerFlag){
             try {
-                register();
+//                register();
                 registerFlag=true;
             } catch (Exception e) {
                 log.error("dubbo 注册失败！",e);
