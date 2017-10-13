@@ -3,6 +3,7 @@ package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 import com.alibaba.dubbo.config.AbstractConfig;
 import com.alibaba.dubbo.config.ConsumerConfig;
 import com.alibaba.dubbo.config.MonitorConfig;
+import com.alibaba.dubbo.config.ServiceConfig;
 import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.Getter;
@@ -58,7 +59,8 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
            id= getIdIfNotExist(config);
            config.setId(id);
         }else if(beanFactory.containsBeanDefinition(id)){
-            throw new IllegalStateException("Duplicate spring bean id " + id);
+           id=getIdIfNotExist(config);
+           config.setId(id);
         }
     }
 
@@ -81,6 +83,8 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
             name=config.getClass().getName();
         }else if(config instanceof MonitorConfig){
             name=config.getClass().getName();
+        }else if(config instanceof ServiceConfig){
+            name=((ServiceConfig) config).getInterfaceClass().getSimpleName();
         }else{
             name=getName(config);
             if(StringUtils.isEmpty(name)){

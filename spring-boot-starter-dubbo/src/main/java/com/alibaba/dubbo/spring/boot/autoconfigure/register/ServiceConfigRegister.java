@@ -1,6 +1,7 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
-import com.alibaba.dubbo.config.*;
+import com.alibaba.dubbo.config.ProviderConfig;
+import com.alibaba.dubbo.config.ServiceConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -8,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-
-import java.util.List;
 
 @Slf4j
 public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> implements ApplicationListener {

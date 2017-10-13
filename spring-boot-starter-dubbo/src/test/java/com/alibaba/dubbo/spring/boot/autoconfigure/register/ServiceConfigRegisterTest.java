@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static junit.framework.TestCase.assertNotNull;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {
         DubboBeanFactory.class
@@ -32,9 +33,9 @@ public class ServiceConfigRegisterTest {
     @Autowired
     private DubboProperties dubboProperties;
     @Test
+    @SuppressWarnings("unchecked")
     public void serviceExport() throws Exception {
         assertNotNull(applicationContext.getBean(dubboProperties.getServices().get(0).getInterfaceClass()));
         log.debug("服务发布成功！");
-        System.in.read();
     }
 }

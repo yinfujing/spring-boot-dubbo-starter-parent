@@ -27,5 +27,4 @@ public class DubboBeanFactory implements BeanFactoryAware {
             registerDubboConfig.registerDubboConfig();
         }
     }
-
 }

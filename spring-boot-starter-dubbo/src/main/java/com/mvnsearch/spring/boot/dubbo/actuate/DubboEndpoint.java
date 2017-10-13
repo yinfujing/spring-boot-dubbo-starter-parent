@@ -5,7 +5,6 @@ import com.alibaba.dubbo.config.ProviderConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.spring.ServiceBean;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
-import com.alibaba.dubbo.spring.boot.autoconfigure.DubboServiceAutoConfiguration;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
@@ -28,7 +27,7 @@ public class DubboEndpoint extends AbstractEndpoint {
 
     //TODO 只能使用中间数据
 //    @Autowired
-    private DubboServiceAutoConfiguration dubboServiceAutoConfiguration;
+//    private DubboServiceAutoConfiguration dubboServiceAutoConfiguration;
     @Autowired
     private ApplicationConfig applicationConfig;
     @Autowired
@@ -62,13 +61,13 @@ public class DubboEndpoint extends AbstractEndpoint {
 //        if(dubboProperties.isServiceEnable()){
             info.put("server",true);
             Map<String,Object> serviceConfig=new HashMap<>();
-            for (Map.Entry<String,ServiceBean> entry: dubboServiceAutoConfiguration.getServiceConfigMap().entrySet()) {
-                Map<String,String> serviceMap=new HashMap<>();
-                serviceMap.put("dubbo:service",entry.getValue().toString());
-                serviceMap.put("dubbo:protocols", ArrayUtils.toString(entry.getValue().getProtocols()));
-                serviceMap.put("methods",ArrayUtils.toString(entry.getValue().getInterfaceClass().getMethods()));
-                serviceConfig.put(entry.getKey(),serviceMap);
-            }
+//            for (Map.Entry<String,ServiceBean> entry: dubboServiceAutoConfiguration.getServiceConfigMap().entrySet()) {
+//                Map<String,String> serviceMap=new HashMap<>();
+//                serviceMap.put("dubbo:service",entry.getValue().toString());
+//                serviceMap.put("dubbo:protocols", ArrayUtils.toString(entry.getValue().getProtocols()));
+//                serviceMap.put("methods",ArrayUtils.toString(entry.getValue().getInterfaceClass().getMethods()));
+//                serviceConfig.put(entry.getKey(),serviceMap);
+//            }
             info.put("serverConfig",serviceConfig);
 //        }else{
 //            info.put("server",false);
