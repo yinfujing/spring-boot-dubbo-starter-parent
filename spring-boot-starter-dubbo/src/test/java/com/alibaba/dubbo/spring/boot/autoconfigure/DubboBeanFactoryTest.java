@@ -16,36 +16,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static junit.framework.TestCase.assertNotNull;
 
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = {
-        DubboBeanFactory.class
-        , MonitorConfigRegister.class
-        , ApplicationConfigRegister.class, ModuleConfigRegister.class, RegistryConfigRegister.class, ProtocolConfigRegister.class
-        , ConsumerConfigRegister.class, ReferenceConfigRegister.class
-        , ServiceConfigRegister.class, DemoServiceImpl.class
-
-})
-@EnableConfigurationProperties({DubboProperties.class})
-@Slf4j
-@ActiveProfiles({"dubbo-standard", "dubbo-consumer","dubbo-provider"})
-public class DubboBeanFactoryTest {
-    @Autowired
-    private ApplicationContext applicationContext;
-    @Autowired
-    private DubboProperties dubboProperties;
-
-    @Autowired
-    @Qualifier("demoService")
-    private DemoService demoService;
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void exportAndReference() throws Exception {
-        assertNotNull(applicationContext.getBeansOfType(dubboProperties.getServices().get(0).getInterfaceClass()));
-        log.debug("服务发布成功！");
-        demoService.sayHello();
-        demoService.sayHello();
-        demoService.sayHello();
-    }
-}
+//
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = {
+//        DubboBeanFactory.class
+//        , MonitorConfigRegister.class
+//        , ApplicationConfigRegister.class, ModuleConfigRegister.class, RegistryConfigRegister.class, ProtocolConfigRegister.class
+//        , ConsumerConfigRegister.class, ReferenceConfigRegister.class
+//        , ServiceConfigRegister.class,
+//
+//})
+//@EnableConfigurationProperties({DubboProperties.class})
+//
+//public class DubboBeanFactoryTest {
+//
+//}

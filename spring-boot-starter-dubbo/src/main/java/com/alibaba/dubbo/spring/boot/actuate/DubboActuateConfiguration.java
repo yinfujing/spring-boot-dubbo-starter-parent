@@ -1,9 +1,9 @@
 package com.alibaba.dubbo.spring.boot.actuate;
 
 import com.mvnsearch.spring.boot.dubbo.actuate.DubboEndpoint;
-import com.mvnsearch.spring.boot.dubbo.actuate.DubboHealthIndicator;
 import com.mvnsearch.spring.boot.dubbo.actuate.DubboMetrics;
 import org.springframework.boot.actuate.endpoint.Endpoint;
+import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnClass(Endpoint.class)
-public class DubboActuateConfiguration {
+public class DubboActuateConfiguration  {
     @Bean
     public DubboHealthIndicator dubboHealthIndicator() {
         return new DubboHealthIndicator();

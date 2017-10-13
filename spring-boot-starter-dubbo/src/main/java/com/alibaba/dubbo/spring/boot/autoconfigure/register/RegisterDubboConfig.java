@@ -1,9 +1,6 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
-import com.alibaba.dubbo.config.AbstractConfig;
-import com.alibaba.dubbo.config.ConsumerConfig;
-import com.alibaba.dubbo.config.MonitorConfig;
-import com.alibaba.dubbo.config.ServiceConfig;
+import com.alibaba.dubbo.config.*;
 import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.Getter;
@@ -38,14 +35,15 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     }
 
     abstract void initConfigs();
+
     abstract T getDefaultBySystem();
 
     public void registerDubboConfig() throws Exception {
-        if(configs!=null){
-            log.debug("注册 {}",getTClass().getCanonicalName());
+        if (configs != null) {
+            log.debug("注册 {}", getTClass().getCanonicalName());
             for (T config : configs) {
                 initConfigId(config);
-                beanFactory.registerSingleton(config.getId(),config);
+                beanFactory.registerSingleton(config.getId(), config);
             }
         }
     }
@@ -54,22 +52,22 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
      * 初始化 config 的id 属性
      */
     void initConfigId(T config) {
-        String id=config.getId();
-        if(StringUtils.isEmpty(id)){
-           id= getIdIfNotExist(config);
-           config.setId(id);
-        }else if(beanFactory.containsBeanDefinition(id)){
-           id=getIdIfNotExist(config);
-           config.setId(id);
+        String id = config.getId();
+        if (StringUtils.isEmpty(id)) {
+            id = getIdIfNotExist(config);
+            config.setId(id);
+        } else if (beanFactory.containsBeanDefinition(id)) {
+            id = getIdIfNotExist(config);
+            config.setId(id);
         }
     }
 
     private String getIdIfNotExist(T config) {
         String name = getNameByPropertiesOrClassName(config);
-        String id=name;
-        int counter=2;
-        while(beanFactory.containsBeanDefinition(id)){
-            id=name+(counter++);
+        String id = name;
+        int counter = 2;
+        while (beanFactory.containsBeanDefinition(id)) {
+            id = name + (counter++);
         }
         return id;
     }
@@ -79,38 +77,38 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
      */
     private String getNameByPropertiesOrClassName(T config) {
         String name;
-        if(config instanceof ConsumerConfig){
-            name=config.getClass().getName();
-        }else if(config instanceof MonitorConfig){
-            name=config.getClass().getName();
-        }else if(config instanceof ServiceConfig){
-            name=((ServiceConfig) config).getInterfaceClass().getSimpleName();
-        }else{
-            name=getName(config);
-            if(StringUtils.isEmpty(name)){
-                name=config.getClass().getName();
-                setName(config,name);
+        if (config instanceof ConsumerConfig) {
+            name = config.getClass().getName();
+        } else if (config instanceof MonitorConfig) {
+            name = config.getClass().getName();
+        } else if (config instanceof ServiceConfig) {
+            name = ((ServiceConfig) config).getInterfaceClass().getSimpleName();
+        } else {
+            name = getName(config);
+            if (StringUtils.isEmpty(name)) {
+                name = config.getClass().getName();
+                setName(config, name);
             }
         }
         return name;
     }
 
     @SuppressWarnings("JavaReflectionMemberAccess")
-    private String getName(T t){
+    private String getName(T t) {
         try {
             return (String) t.getClass().getDeclaredMethod("getName").invoke(t);
-        } catch (IllegalAccessException| InvocationTargetException |NoSuchMethodException e) {
-            log.info("getName 失败",e);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            log.info("getName 失败", e);
             return null;
         }
     }
 
     @SuppressWarnings("JavaReflectionMemberAccess")
-    private void setName(T t, String name){
+    private void setName(T t, String name) {
         try {
-            t.getClass().getDeclaredMethod("setName",String.class).invoke(t,name);
-        } catch (IllegalAccessException| InvocationTargetException |NoSuchMethodException e) {
-            log.info("setName 失败",e);
+            t.getClass().getDeclaredMethod("setName", String.class).invoke(t, name);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            log.info("setName 失败", e);
         }
     }
 
@@ -118,15 +116,15 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     @SuppressWarnings({"JavaReflectionMemberAccess"})
     private T getDefault() {
         Class<T> tClass = getTClass();
-        Method method=getIsDefaultMethod();
+        Method method = getIsDefaultMethod();
         //校验，是否存在 isDefault() 这个方法,不存在将不处理！
-        if(method!=null){
+        if (method != null) {
             if ((configs != null) && (configs.size() != 0)) {
-                if(!isContainsDefaultInList(method)){
-                    defaultConfig=configs.get(0);
+                if (!isContainsDefaultInList(method)) {
+                    defaultConfig = configs.get(0);
                 }
                 setFirstElementAsDefault(tClass);
-            }else{
+            } else {
                 initByDefault();
             }
         }
@@ -134,12 +132,14 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     }
 
     @SuppressWarnings("JavaReflectionMemberAccess")
-    private Method getIsDefaultMethod(){
+    private Method getIsDefaultMethod() {
         try {
-            if(ReferenceBean.class.equals(getTClass())){
+            if (ReferenceConfig.class == getTClass()) {
+                return null;
+            } else if (ServiceConfig.class == getTClass()) {
                 return null;
             }
-             return  getTClass().getDeclaredMethod("isDefault");
+            return getTClass().getDeclaredMethod("isDefault");
         } catch (NoSuchMethodException e) {
             log.debug("{} 没有 isDefault 方法", getTClass().getCanonicalName());
             return null;
@@ -150,9 +150,9 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
      * list 都为空， 自动启用系统初始化配置
      */
     private void initByDefault() {
-        defaultConfig=getDefaultBySystem();
-        if(defaultConfig!=null){
-            configs=new ArrayList<>();
+        defaultConfig = getDefaultBySystem();
+        if (defaultConfig != null) {
+            configs = new ArrayList<>();
             configs.add(defaultConfig);
         }
     }
@@ -160,15 +160,16 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     @SuppressWarnings({"JavaReflectionMemberAccess", "JavaReflectionInvocation"})
     private void setFirstElementAsDefault(Class<T> tClass) {
         try {
-            tClass.getDeclaredMethod("setDefault",Boolean.class).invoke(defaultConfig,true);
-            configs.set(0,defaultConfig);
-        } catch (NoSuchMethodException | IllegalAccessException |InvocationTargetException e) {
+            tClass.getDeclaredMethod("setDefault", Boolean.class).invoke(defaultConfig, true);
+            configs.set(0, defaultConfig);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             log.debug("{} 没有 setDefault 方法", tClass.getCanonicalName());
         }
     }
 
     /**
      * 在 list　中是否存在　默认的　config
+     *
      * @param method isDefault 方法
      * @return true 找到了，false 为没有
      */
@@ -213,7 +214,7 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
         } catch (BeanDefinitionStoreException e) {
             initConfigId(source);
             configs.add(source);
-            beanFactory.registerSingleton(source.getId(),source);
+            beanFactory.registerSingleton(source.getId(), source);
         }
         return source;
     }
@@ -224,10 +225,10 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
     public abstract T compareAndMerge(T source, T target);
 
 
-    T getDefault(T source){
-        if(source==null){
+    T getDefault(T source) {
+        if (source == null) {
             return defaultConfig;
-        }else{
+        } else {
             return merge(source);
         }
     }
