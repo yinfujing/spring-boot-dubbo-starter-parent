@@ -1,7 +1,7 @@
-package com.mvnsearch.spring.boot.dubbo.actuate;
+package org.mvnsearch.spring.boot.dubbo.actuate;
 
-import com.mvnsearch.spring.boot.dubbo.filter.ConsumerInvokeStaticsFilter;
-import com.mvnsearch.spring.boot.dubbo.filter.ProviderInvokeStaticsFilter;
+import org.mvnsearch.spring.boot.dubbo.filter.ConsumerInvokeStaticsFilter;
+import org.mvnsearch.spring.boot.dubbo.filter.ProviderInvokeStaticsFilter;
 import org.springframework.boot.actuate.endpoint.PublicMetrics;
 import org.springframework.boot.actuate.metrics.Metric;
 import org.springframework.stereotype.Component;

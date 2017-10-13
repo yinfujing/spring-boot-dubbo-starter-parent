@@ -1,1 +1,0 @@
-dubboexport=org.mvnsearch.spring.boot.dubbo.listener.ProviderExportListener

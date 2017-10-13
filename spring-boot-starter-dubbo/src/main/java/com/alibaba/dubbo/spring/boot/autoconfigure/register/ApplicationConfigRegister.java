@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class ApplicationConfigRegister  extends RegisterDubboConfig<ApplicationConfig>{
+public class ApplicationConfigRegister extends RegisterDubboConfig<ApplicationConfig> {
     public ApplicationConfigRegister(BeanFactory beanFactory, DubboProperties dubboProperties) {
         super(beanFactory, dubboProperties);
     }
@@ -32,31 +32,31 @@ public class ApplicationConfigRegister  extends RegisterDubboConfig<ApplicationC
 
     @Override
     void initConfigs() {
-        configs=dubboProperties.getApplications();
+        configs = dubboProperties.getApplications();
     }
 
     @Override
     ApplicationConfig getDefaultBySystem() {
-        ApplicationConfig config=new ApplicationConfig();
+        ApplicationConfig config = new ApplicationConfig();
         config.setOwner("rui");
-        if(environment.getProperty("info.build") ==null){
+        try {
+            config.setName(environment.getProperty("info.build.artifact"));
+            config.setOrganization(environment.getProperty("info.build.groupId"));
+        } catch (Exception e) {
             log.warn("没有配置 info.build 中的系统信息 ");
             config.setName("dubbo-spring-boot-start");
             config.setOrganization("com.alibaba.dubbo.spring.boot");
-        }else {
-            config.setName(environment.getProperty("info.build.artifact"));
-            config.setOrganization(environment.getProperty("info.build.groupId"));
         }
         config.setDefault(true);
         return config;
-    }
+}
 
     @Override
     public ApplicationConfig compareAndMerge(ApplicationConfig source, ApplicationConfig target) {
         return target;
     }
 
-    public void initConfig(AbstractInterfaceConfig config) {
+    void initConfig(AbstractInterfaceConfig config) {
         ApplicationConfig applicationConfig = config.getApplication();
         config.setApplication(getDefault(applicationConfig));
     }

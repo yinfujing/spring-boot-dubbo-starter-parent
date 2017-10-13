@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: dubbo-standard
+    active: dubbo-standard,dubbo-consumer,dubbo-provider
 
 management:
   security:

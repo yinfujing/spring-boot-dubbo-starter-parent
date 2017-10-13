@@ -1,9 +1,8 @@
 package com.alibaba.dubbo.spring.boot.actuate;
 
-import com.mvnsearch.spring.boot.dubbo.actuate.DubboEndpoint;
-import com.mvnsearch.spring.boot.dubbo.actuate.DubboMetrics;
+import org.mvnsearch.spring.boot.dubbo.actuate.DubboMetrics;
 import org.springframework.boot.actuate.endpoint.Endpoint;
-import org.springframework.boot.actuate.health.AbstractHealthIndicator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +21,8 @@ public class DubboActuateConfiguration  {
     }
 
     @Bean
-    public DubboEndpoint dubboEndpoint() {
-        return new DubboEndpoint();
+    public ZookeeperHealthIndicator zookeeperHealthIndicator(){
+        return new ZookeeperHealthIndicator();
     }
 
     @Bean

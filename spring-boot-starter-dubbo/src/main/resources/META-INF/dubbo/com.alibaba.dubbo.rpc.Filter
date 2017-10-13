@@ -1,2 +1,2 @@
-dubboconsumerstatics=org.mvnsearch.spring.boot.dubbo.listener.ConsumerInvokeStaticsFilter
+dubboconsumerstatic=org.mvnsearch.spring.boot.dubbo.filter.ConsumerInvokeStaticsFilter
 dubboproviderstatics=org.mvnsearch.spring.boot.dubbo.listener.ProviderInvokeStaticsFilter

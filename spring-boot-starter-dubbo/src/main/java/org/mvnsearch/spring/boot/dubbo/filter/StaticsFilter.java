@@ -1,4 +1,4 @@
-package com.mvnsearch.spring.boot.dubbo.filter;
+package org.mvnsearch.spring.boot.dubbo.filter;
 
 import com.alibaba.dubbo.rpc.Filter;
 

@@ -7,39 +7,33 @@ management:
 
 dubbo:
   application:
-    name: provider-demo
-    owner: zhaorui
-    organization: com.dxhy.basic.dubbo
-  registry:
-    address: 10.1.1.153:2181
-    protocol: zookeeper
-  serviceEnable: true
-  service:
-    - interface: com.dxhy.basic.dubbo.demo.service.DemoService
+    - name: provider-demo
+      owner: zhaorui
+      organization: com.dxhy.basic.dubbo
+  registries:
+    - address: 10.1.1.153:2181
+      protocol: zookeeper
+  services:
+    - interface: rui.framework.dubbo.demo.service.NameService
       connections: 10
       protocols:
         - name: dubbo
           port: 20401
         - name: dubbo
           port: 20402
-
       timeout: 2000
-      ref: demoServiceImpl
-
-    - interface: com.dxhy.basic.dubbo.demo.service.DemoService2
+    - interface: rui.framework.dubbo.demo.service.PermissionService
       connections: 10
       protocols:
         - name: dubbo
           port: 20405
         - name: dubbo
           port: 20406
-
       timeout: 2000
-      ref: demoServiceImpl2
-  provider:
-    threads: 200
-    protocols:
-      - name: dubbo
-        port: 20881
-      - name: dubbo
-        port: 20402
+  providers:
+    - threads: 200
+      protocols:
+        - name: dubbo
+          port: 20881
+        - name: dubbo
+          port: 20402

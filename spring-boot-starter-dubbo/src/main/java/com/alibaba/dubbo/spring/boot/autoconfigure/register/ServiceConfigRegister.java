@@ -1,6 +1,7 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure.register;
 
 import com.alibaba.dubbo.config.ProviderConfig;
+import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.ServiceConfig;
 import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,22 @@ public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> im
             configs.set(i,config);
             beanFactory.registerSingleton(config.getId(), config);
         }
+    }
 
+    @SuppressWarnings("Duplicates")
+    @Override
+    void initConfigId(ServiceConfig config) {
+        if(config.getId().equals(config.getInterfaceClass().getName())){
+            String id=config.getInterfaceClass().getSimpleName();
+            id=id.substring(0,1).toLowerCase()+id.substring(1);
+            String name=id;
+            int counter=2;
+            while(beanFactory.containsBean(id)){
+                id=name+counter;
+                counter++;
+            }
+            config.setId(id);
+        }
     }
 
     @Autowired
@@ -64,7 +80,6 @@ public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> im
         moduleConfigRegister.initConfig(config);
         registryConfigRegister.initConfig(config);
         monitorConfigRegister.initConfig(config);
-        //TODO 有bug
         protocolConfigRegister.initConfig(config);
 
         if (config.getRef() == null) {
@@ -93,10 +108,13 @@ public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> im
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (ContextRefreshedEvent.class.getName().equals(event.getClass().getName())) {
+            if(configs==null||configs.size()==0){
+                return ;
+            }
             for (ServiceConfig config : configs) {
                 if (isDelay(config) && !config.isExported() && !config.isUnexported()) {
                     if (log.isInfoEnabled()) {
-                        log.info("服务 {} 开始提供服务!",config.getInterface());
+                        log.info("服务 {} 开始提供服务!",config.getId());
                     }
                     config.export();
                 }

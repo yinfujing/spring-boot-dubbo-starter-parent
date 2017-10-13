@@ -15,6 +15,8 @@
     <logger name="com.alibaba.dubbo.rpc" level="warn"/>
     <logger name="com.alibaba.dubbo.registry.zookeeper.ZookeeperRegistry" level="warn"/>
 
+    <logger name="com.alibaba.dubbo.spring.boot" level="debug"/>
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>

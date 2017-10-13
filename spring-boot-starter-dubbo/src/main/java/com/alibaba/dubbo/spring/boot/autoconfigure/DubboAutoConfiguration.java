@@ -1,5 +1,6 @@
 package com.alibaba.dubbo.spring.boot.autoconfigure;
 
+import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.alibaba.dubbo.config.spring.ServiceBean;
 import com.alibaba.dubbo.spring.boot.autoconfigure.register.*;
@@ -12,14 +13,18 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 /**
  *  这个
  */
 @Configuration
-@ConditionalOnClass({ReferenceBean.class, ServiceBean.class})
+@ConditionalOnClass({ReferenceConfig.class, ReferenceConfig.class})
 @EnableConfigurationProperties(DubboProperties.class)
 @Setter
+@Order(HIGHEST_PRECEDENCE)
 public class DubboAutoConfiguration implements BeanFactoryAware {
     @Autowired
     private BeanFactory beanFactory;
@@ -27,10 +32,6 @@ public class DubboAutoConfiguration implements BeanFactoryAware {
     @Autowired
     private DubboProperties dubboProperties;
 
-    @Bean
-    DubboBeanFactory dubboBeanFactory(){
-        return new DubboBeanFactory();
-    }
 
     @Bean
     ApplicationConfigRegister applicationConfigRegister(){
@@ -71,11 +72,4 @@ public class DubboAutoConfiguration implements BeanFactoryAware {
     MonitorConfigRegister monitorConfigRegister(){
         return new MonitorConfigRegister(beanFactory,dubboProperties);
     }
-
-
-
-
-
-
-
 }

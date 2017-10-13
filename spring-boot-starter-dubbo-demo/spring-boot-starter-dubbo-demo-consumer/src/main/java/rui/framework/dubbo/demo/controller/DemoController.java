@@ -19,21 +19,21 @@ import java.util.List;
  */
 @RestController
 public class DemoController {
-    @Reference
-    private UserService userService;
+//    @Reference
+//    private UserService userService;
     @Autowired
-    @Reference
+//    @Reference
     private NameService nameService;
-    @Autowired
-    @Reference
-    private RoleService roleService;
+//    @Autowired
+//    @Reference
+//    private RoleService roleService;
 
     @RequestMapping("/say/{name}")
     public List<String> hello(@PathVariable("name") String name){
         List<String> responseMsg=new ArrayList<>();
-        responseMsg.add(userService.sayHello(name));
+//        responseMsg.add(userService.sayHello(name));
         responseMsg.add(nameService.getName(name));
-        responseMsg.add(roleService.getRoles(name).toString());
+//        responseMsg.add(roleService.getRoles(name).toString());
         return responseMsg;
     }
 

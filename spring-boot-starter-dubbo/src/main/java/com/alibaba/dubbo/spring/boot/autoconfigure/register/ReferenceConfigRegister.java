@@ -49,6 +49,7 @@ public class ReferenceConfigRegister extends RegisterDubboConfig<ReferenceConfig
     @Setter
     private DubboReferenceFactoryBean<?> dubboReferenceFactoryBean= new DubboReferenceFactoryBean<>();
 
+    @SuppressWarnings("Duplicates")
     @Override
     void initConfigId(ReferenceConfig config) {
         if(config.getId().equals(config.getInterfaceClass().getName())){
