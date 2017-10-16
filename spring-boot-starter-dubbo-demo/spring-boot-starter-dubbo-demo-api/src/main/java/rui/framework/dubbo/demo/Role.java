@@ -12,9 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements Serializable {
-    private String uid;
-    private String userName;
-    private String password;
-    private List<Role> roles;
+public class Role implements Serializable {
+    private String id;
+
+    private String name;
+
+    private String desc;
+
+    private List<Permission> permissionList;
 }

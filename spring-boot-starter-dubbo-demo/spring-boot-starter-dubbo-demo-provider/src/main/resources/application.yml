@@ -14,22 +14,9 @@ dubbo:
     - address: 10.1.1.153:2181
       protocol: zookeeper
   services:
-    - interface: rui.framework.dubbo.demo.service.NameService
-      connections: 10
-      protocols:
-        - name: dubbo
-          port: 20401
-        - name: dubbo
-          port: 20402
-      timeout: 2000
+    - interface: rui.framework.dubbo.demo.service.UserService
+    - interface: rui.framework.dubbo.demo.service.RoleService
     - interface: rui.framework.dubbo.demo.service.PermissionService
-      connections: 10
-      protocols:
-        - name: dubbo
-          port: 20405
-        - name: dubbo
-          port: 20406
-      timeout: 2000
   providers:
     - threads: 200
       protocols:

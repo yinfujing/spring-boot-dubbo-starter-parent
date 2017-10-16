@@ -1,7 +1,11 @@
 package rui.framework.dubbo.demo.service;
 
+import rui.framework.dubbo.demo.Role;
+
 import java.util.List;
 
 public interface RoleService {
-    List<String> getRoles(String userName);
+    Role getRole(String id);
+
+    List<Role> getMore(int size);
 }

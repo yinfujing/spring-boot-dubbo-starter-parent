@@ -8,8 +8,10 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 
 @Slf4j
@@ -19,8 +21,8 @@ public class DubboBeanFactory implements BeanPostProcessor {
     @Setter
     private BeanFactory beanFactory;
 
-    private boolean registerFlag;
 
+    @PostConstruct
     public void register() throws Exception {
         log.debug("dubbo 工厂注册 ");
         DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory) beanFactory;
@@ -28,18 +30,12 @@ public class DubboBeanFactory implements BeanPostProcessor {
         for (RegisterDubboConfig registerDubboConfig : registerDubboConfigMap.values()) {
             registerDubboConfig.registerDubboConfig();
         }
+
+
     }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if(!registerFlag){
-            try {
-//                register();
-                registerFlag=true;
-            } catch (Exception e) {
-                log.error("dubbo 注册失败！",e);
-            }
-        }
         return bean;
     }
 

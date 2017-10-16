@@ -1,7 +1,10 @@
 package rui.framework.dubbo.demo.service;
 
+import rui.framework.dubbo.demo.Permission;
+
 import java.util.List;
 
 public interface PermissionService {
-    List<String> showPermission(String userName);
+    Permission query(String id);
+    List<Permission> queryMore(int size);
 }

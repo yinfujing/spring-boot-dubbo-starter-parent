@@ -7,12 +7,13 @@ import com.alibaba.dubbo.spring.boot.autoconfigure.DubboProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 @Slf4j
-public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> implements ApplicationListener {
+public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> implements CommandLineRunner {
     public ServiceConfigRegister(BeanFactory listableBeanFactory, DubboProperties dubboProperties) {
         super(listableBeanFactory, dubboProperties);
     }
@@ -105,23 +106,6 @@ public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> im
         return null;
     }
 
-    @Override
-    public void onApplicationEvent(ApplicationEvent event) {
-        if (ContextRefreshedEvent.class.getName().equals(event.getClass().getName())) {
-            if(configs==null||configs.size()==0){
-                return ;
-            }
-            for (ServiceConfig config : configs) {
-                if (isDelay(config) && !config.isExported() && !config.isUnexported()) {
-                    if (log.isInfoEnabled()) {
-                        log.info("服务 {} 开始提供服务!",config.getId());
-                    }
-                    config.export();
-                }
-            }
-        }
-    }
-
     private boolean isDelay(ServiceConfig serviceConfig) {
         Integer delay = serviceConfig.getDelay();
         ProviderConfig provider = serviceConfig.getProvider();
@@ -129,5 +113,20 @@ public class ServiceConfigRegister extends RegisterDubboConfig<ServiceConfig> im
             delay = provider.getDelay();
         }
         return delay == null || delay == -1;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        if(configs==null||configs.size()==0){
+            return ;
+        }
+        for (ServiceConfig config : configs) {
+            if (isDelay(config) && !config.isExported() && !config.isUnexported()) {
+                if (log.isInfoEnabled()) {
+                    log.info("服务 {} 开始提供服务!",config.getId());
+                }
+                config.export();
+            }
+        }
     }
 }
