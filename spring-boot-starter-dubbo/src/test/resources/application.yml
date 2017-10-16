@@ -10,7 +10,7 @@ management:
     enabled: false
 info:
   build:
-    groupId: rui.framework
+    groupId: com.github.yinfujing
     artifact: spring-boot-dubbo-starter-parent
     name: dubbo 的 spring boot starter
     version: 0.0.1

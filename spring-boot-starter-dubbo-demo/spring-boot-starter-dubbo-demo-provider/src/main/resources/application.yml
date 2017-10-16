@@ -14,9 +14,9 @@ dubbo:
     - address: 10.1.1.153:2181
       protocol: zookeeper
   services:
-    - interface: rui.framework.dubbo.demo.service.UserService
-    - interface: rui.framework.dubbo.demo.service.RoleService
-    - interface: rui.framework.dubbo.demo.service.PermissionService
+    - interface: com.github.yinfujing.dubbo.demo.service.UserService
+    - interface: com.github.yinfujing.dubbo.demo.service.RoleService
+    - interface: com.github.yinfujing.dubbo.demo.service.PermissionService
   providers:
     - threads: 200
       protocols:
