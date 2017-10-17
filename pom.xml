@@ -5,7 +5,7 @@
 
 	<groupId>com.github.yinfujing</groupId>
 	<artifactId>spring-boot-dubbo-starter-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<packaging>pom</packaging>
 
@@ -45,6 +45,25 @@
 		</license>
 	</licenses>
 
+	<scm>
+		<tag>master</tag>
+		<url>https://github.com/yinfujing/spring-boot-dubbo-starter-parent</url>
+		<connection>scm:git:git@github.com:yinfujing/spring-boot-dubbo-starter-parent.git</connection>
+		<developerConnection>scm:git:git@github.com:yinfujing/spring-boot-dubbo-starter-parent.git</developerConnection>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>赵睿</name>
+			<id>zhaorui</id>
+			<email>zhaoruizzb@163.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+8</timezone>
+		</developer>
+	</developers>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -81,7 +100,85 @@
 				<artifactId>versions-maven-plugin</artifactId>
 				<version>2.2</version>
 			</plugin>
+
+			<!--sonatype 插件-->
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+
+
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<!--maven GPG 插件 签名-->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<!--源码-->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>2.2.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<!--javaDoc-->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
