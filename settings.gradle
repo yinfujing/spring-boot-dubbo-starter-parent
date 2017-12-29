@@ -1,0 +1,16 @@
+rootProject.name = 'spring-boot-dubbo-starter-parent'
+
+include 'spring-boot-starter-dubbo'
+include 'spring-boot-starter-dubbo-demo'
+
+
+include("spring-boot-starter-dubbo-demo:spring-boot-starter-dubbo-demo-api")
+include("spring-boot-starter-dubbo-demo:spring-boot-starter-dubbo-demo-consumer")
+include("spring-boot-starter-dubbo-demo:spring-boot-starter-dubbo-demo-provider")
+
+
+project(":spring-boot-starter-dubbo").name="starter"
+project(":spring-boot-starter-dubbo-demo").name="demo"
+project(":spring-boot-starter-dubbo-demo:spring-boot-starter-dubbo-demo-api").name="api"
+project(":spring-boot-starter-dubbo-demo:spring-boot-starter-dubbo-demo-consumer").name="consumer"
+project(":spring-boot-starter-dubbo-demo:spring-boot-starter-dubbo-demo-provider").name="provider"

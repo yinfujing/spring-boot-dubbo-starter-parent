@@ -29,8 +29,6 @@ public class DubboBeanFactory implements BeanPostProcessor {
         for (RegisterDubboConfig registerDubboConfig : registerDubboConfigMap.values()) {
             registerDubboConfig.registerDubboConfig();
         }
-
-
     }
 
     @Override

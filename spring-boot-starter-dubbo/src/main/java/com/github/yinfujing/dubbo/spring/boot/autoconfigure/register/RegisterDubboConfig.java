@@ -82,9 +82,9 @@ public abstract class RegisterDubboConfig<T extends AbstractConfig> {
             name = config.getClass().getName();
         } else if (config instanceof ServiceConfig) {
             name = ((ServiceConfig) config).getInterfaceClass().getSimpleName();
-        } else if(config instanceof RegistryConfig){
-            name= config.getClass().getSimpleName();
-        }else {
+        } else if (config instanceof RegistryConfig) {
+            name = config.getClass().getSimpleName();
+        } else {
             name = getName(config);
             if (StringUtils.isEmpty(name)) {
                 name = config.getClass().getName();

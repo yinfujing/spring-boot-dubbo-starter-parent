@@ -1,0 +1,125 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            name 'aliyun-maven'
+            url "http://maven.aliyun.com/nexus/content/groups/public/"
+        }
+    }
+
+    dependencies {
+        //junit5 单元测试
+        classpath("org.junit.platform:junit-platform-gradle-plugin:${junitPlatformVersion}")
+        //spring boot 插件
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+//TODO 提交代码到中心仓库
+//TODO licenses
+//TODO scm developerConnection 等
+//TODO developers
+
+//TODO javadoc
+//TODO source
+
+//TODO linkHomepage = https://github.com/dongyuanlongwang/algorithms
+//TODO linkIssue =https://github.com/dongyuanlongwang/algorithms/issues
+//TODO linkScmConnection=https://github.com/dongyuanlongwang/algorithms.git
+configure(allprojects) { project ->
+    apply plugin: 'java-library'
+    apply plugin: 'org.junit.platform.gradle.plugin'
+    apply plugin: 'spring-boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.github.yinfujing'
+    version = "${version}"
+
+
+    ext.commonsCollections4Version = "4.1"
+    ext.commonsLang3Version = "3.6"
+    ext.commonsIoVersion = "2.5"
+
+    ext.guavaVersion = "20.0"
+
+    ext.logbackVersion = "1.1.11"
+
+
+    compileJava {
+        sourceCompatibility = "${javaVersion}"
+        targetCompatibility = "${javaVersion}"
+        options.encoding = "${charset}"
+    }
+
+    compileTestJava {
+        sourceCompatibility = "${javaVersion}"
+        targetCompatibility = "${javaVersion}"
+        options.encoding = "${charset}"
+        options.compilerArgs += "-parameters"
+    }
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom 'io.spring.platform:platform-bom:Brussels-SR6'
+        }
+    }
+}
+
+project("starter") {
+    dependencies {
+        compile group: 'com.alibaba', name: 'dubbo', version: "${dubboVersion}"
+        compile("org.apache.zookeeper:zookeeper:${zookeeperVersion}") {
+            exclude group: '*'
+        }
+//        compile 'joda-time:joda-time'
+
+        compile 'com.google.guava:guava'
+        compile 'org.springframework.boot:spring-boot-actuator'
+        compile 'com.101tec:zkclient:0.10'
+        //TODO 是否能够干掉
+        runtime 'org.springframework.boot:spring-boot-starter-web'
+
+        runtime 'org.springframework.boot:spring-boot-configuration-processor'
+
+        api 'org.projectlombok:lombok'
+
+        testCompile('org.apiguardian:apiguardian-api:1.0.0')
+        testCompile("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+        testCompile("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+
+        testCompile 'org.springframework.boot:spring-boot-test'
+        testCompile('com.github.sbrannen:spring-test-junit5:1.0.2')
+
+    }
+}
+
+configure(subprojects
+        - project(":demo:api")
+        - project("starter")) { subProject ->
+    dependencies {
+        implementation project(':demo:api')
+        implementation project(':starter')
+
+        compile 'org.springframework.boot:spring-boot-starter-web'
+        compile 'org.springframework.boot:spring-boot-actuator'
+
+        // To avoid compiler warnings about @API annotations in JUnit code.
+        testCompile('org.apiguardian:apiguardian-api:1.0.0')
+
+        testCompile("org.junit.platform:junit-platform-launcher:1.0.2")
+        testCompile("org.junit.jupiter:junit-jupiter-engine:5.0.2")
+        testCompile('com.github.sbrannen:spring-test-junit5:1.0.2')
+
+        testCompile 'org.springframework.boot:spring-boot-test'
+
+    }
+}
+
+project(":demo:provider"){
+    dependencies{
+        compile 'org.apache.commons:commons-lang3'
+    }
+}

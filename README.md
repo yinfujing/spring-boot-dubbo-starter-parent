@@ -5,3 +5,11 @@
 项目部分代码来源：
 1. [https://github.com/linux-china/spring-boot-dubbo](https://github.com/linux-china/spring-boot-dubbo)
 2. [dubbo的jar包来源-yjmyzz/dubbox](https://github.com/yjmyzz/dubbox)
+
+
+
+# 致谢：
+
+1. [spring-boot-dubbo](https://github.com/linux-china/spring-boot-dubbo)
+
+2. dubbo来源于[dubbox](https://github.com/yjmyzz/dubbox)
